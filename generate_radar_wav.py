@@ -216,7 +216,6 @@ class RadarWAVGenerator:
         band = freq_range['band']
         min_freq = freq_range['min_mhz']
         max_freq = freq_range['max_mhz']
-        center_freq = (min_freq + max_freq) / 2
         bandwidth = max_freq - min_freq
 
         # Récupération des paramètres de signature du radar (DI et PRI)
@@ -232,13 +231,13 @@ class RadarWAVGenerator:
         print(f"\nCaractéristiques radar:")
         print(f"  Bande: {band}")
         print(f"  Fréquence: {min_freq} - {max_freq} MHz")
-        print(f"  Centre: {center_freq} MHz")
         print(f"  Bande passante: {bandwidth} MHz")
         print(f"  DI (Durée d'Impulsion): {di_ms} ms")
         print(f"  PRI (Période de Répétition): {pri_ms} ms")
         print(f"  PRF (Pulse Repetition Frequency): {prf_hz:.2f} Hz")
         print(f"  Duty Cycle: {duty_cycle*100:.2f}%")
         print(f"\nParamètres de génération:")
+        print(f"  Fréquence: Aléatoire entre {min_freq}-{max_freq} MHz")
         print(f"  Durée: {duration_range[0]}-{duration_range[1]} secondes")
         print(f"  Puissance signal: {power_range[0]}-{power_range[1]}")
         print(f"  Puissance bruit: {noise_range[0]}-{noise_range[1]}")
@@ -249,7 +248,8 @@ class RadarWAVGenerator:
             "radar_name": radar_name,
             "boat": radar_info['boat'],
             "band": band,
-            "center_freq_mhz": center_freq,
+            "min_freq_mhz": min_freq,
+            "max_freq_mhz": max_freq,
             "bandwidth_mhz": bandwidth,
             "DI_ms": di_ms,
             "PRI_ms": pri_ms,
@@ -267,9 +267,8 @@ class RadarWAVGenerator:
             signal_power = np.random.uniform(*power_range)
             noise_power = np.random.uniform(*noise_range)
 
-            # Variation de fréquence (±5% autour du centre)
-            freq_variation = np.random.uniform(-bandwidth*0.05, bandwidth*0.05)
-            actual_center_freq = center_freq + freq_variation
+            # Fréquence centrale aléatoire entre min_freq et max_freq
+            actual_center_freq = np.random.uniform(min_freq, max_freq)
 
             # Calcul du SNR
             snr_db = self.calculate_snr(signal_power, noise_power)
