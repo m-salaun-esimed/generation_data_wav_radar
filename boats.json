@@ -1,0 +1,200 @@
+{
+  "CDG": {
+    "radar_systems": [
+      {
+        "name": "smart_s_mK2",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "EF",
+            "min_mhz": 2850,
+            "max_mhz": 3050
+          }
+        ],
+        "DI_ms": 45,
+        "PRI_ms": 450
+      },
+      {
+        "name": "drbv_15C-EF",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "EF",
+            "min_mhz": 3000,
+            "max_mhz": 3100
+          }
+        ],
+        "DI_ms": 35,
+        "PRI_ms": 380
+      },
+      {
+        "name": "SCANTER_6200_I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "I",
+            "min_mhz": 9300,
+            "max_mhz": 9400
+          }
+        ],
+        "DI_ms": 15,
+        "PRI_ms": 220
+      },
+      {
+        "name": "ARABEL-I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "I",
+            "min_mhz": 9200,
+            "max_mhz": 9600
+          }
+        ],
+        "DI_ms": 28,
+        "PRI_ms": 420
+      }
+    ]
+  },
+  "FLF": {
+    "radar_systems": [
+      {
+        "name": "DRBV_15_C",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "C",
+            "min_mhz": 3000,
+            "max_mhz": 3100
+          }
+        ],
+        "DI_ms": 32,
+        "PRI_ms": 410
+      },
+      {
+        "name": "DRBN_34_I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "I",
+            "min_mhz": 9300,
+            "max_mhz": 9400
+          }
+        ],
+        "DI_ms": 18,
+        "PRI_ms": 290
+      },
+      {
+        "name": "KUMC_J",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "J",
+            "min_mhz": 14000,
+            "max_mhz": 17000
+          }
+        ],
+        "DI_ms": 8,
+        "PRI_ms": 150
+      }
+    ]
+  },
+  "FREMM": {
+    "radar_systems": [
+      {
+        "name": "HERAKLES_EF",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "EF",
+            "min_mhz": 2800,
+            "max_mhz": 2900
+          }
+        ],
+        "DI_ms": 55,
+        "PRI_ms": 480
+      },
+      {
+        "name": "SCANTER_6002_I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "I",
+            "min_mhz": 9300,
+            "max_mhz": 9400
+          }
+        ],
+        "DI_ms": 12,
+        "PRI_ms": 260
+      },
+      {
+        "name": "SCANTER_2001_I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "I",
+            "min_mhz": 9300,
+            "max_mhz": 9400
+          }
+        ],
+        "DI_ms": 16,
+        "PRI_ms": 280
+      }
+    ]
+  },
+  "FDA": {
+    "radar_systems": [
+      {
+        "name": "LRR_CD",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "CD",
+            "min_mhz": 1300,
+            "max_mhz": 1400
+          }
+        ],
+        "DI_ms": 65,
+        "PRI_ms": 500
+      },
+      {
+        "name": "EMPAR_GH",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "GH",
+            "min_mhz": 5500,
+            "max_mhz": 5700
+          }
+        ],
+        "DI_ms": 25,
+        "PRI_ms": 340
+      },
+      {
+        "name": "SCANTER_6002_I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "EF",
+            "min_mhz": 9300,
+            "max_mhz": 9400
+          }
+        ],
+        "DI_ms": 14,
+        "PRI_ms": 240
+      },
+      {
+        "name": "ORION_RTN_2SX_J",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "J",
+            "min_mhz": 12000,
+            "max_mhz": 13000
+          }
+        ],
+        "DI_ms": 6,
+        "PRI_ms": 160
+      }
+    ]
+  }
+}

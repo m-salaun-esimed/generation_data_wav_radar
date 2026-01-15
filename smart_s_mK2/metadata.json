@@ -1,0 +1,195 @@
+{
+  "radar_name": "smart_s_mK2",
+  "boat": "CDG",
+  "band": "EF",
+  "center_freq_mhz": 2950.0,
+  "bandwidth_mhz": 200,
+  "DI_ms": 45,
+  "PRI_ms": 450,
+  "PRF_hz": 2.2222222222222223,
+  "duty_cycle": 0.09999999999999999,
+  "sample_rate_hz": 48000,
+  "num_files": 20,
+  "files": [
+    {
+      "filename": "smart_s_mK2_sample_000_snr9.3dB.wav",
+      "duration_sec": 8.916469254288044,
+      "signal_power": 0.3589253905073514,
+      "noise_power": 0.12294936960725146,
+      "snr_db": 9.305557504422891,
+      "center_freq_mhz": 2954.552953462857,
+      "num_samples": 427990
+    },
+    {
+      "filename": "smart_s_mK2_sample_001_snr9.1dB.wav",
+      "duration_sec": 9.0626352093241,
+      "signal_power": 0.5789457071481249,
+      "noise_power": 0.20198777298396076,
+      "snr_db": 9.14625514214967,
+      "center_freq_mhz": 2941.9079642234683,
+      "num_samples": 435006
+    },
+    {
+      "filename": "smart_s_mK2_sample_002_snr11.6dB.wav",
+      "duration_sec": 5.240353178473988,
+      "signal_power": 0.6923541574704736,
+      "noise_power": 0.18241884498714334,
+      "snr_db": 11.585172056313768,
+      "center_freq_mhz": 2942.980956731365,
+      "num_samples": 251536
+    },
+    {
+      "filename": "smart_s_mK2_sample_003_snr14.9dB.wav",
+      "duration_sec": 6.599288228191849,
+      "signal_power": 0.8525933144739772,
+      "noise_power": 0.15283120844905265,
+      "snr_db": 14.930597514394055,
+      "center_freq_mhz": 2944.978584520772,
+      "num_samples": 316765
+    },
+    {
+      "filename": "smart_s_mK2_sample_004_snr9.6dB.wav",
+      "duration_sec": 6.70705281389366,
+      "signal_power": 0.8974801593797002,
+      "noise_power": 0.295683613795221,
+      "snr_db": 9.64395197898561,
+      "center_freq_mhz": 2952.139136309831,
+      "num_samples": 321938
+    },
+    {
+      "filename": "smart_s_mK2_sample_005_snr8.5dB.wav",
+      "duration_sec": 6.73557903723012,
+      "signal_power": 0.4827264047491372,
+      "noise_power": 0.18097218563571218,
+      "snr_db": 8.52178447096976,
+      "center_freq_mhz": 2959.3953398390267,
+      "num_samples": 323307
+    },
+    {
+      "filename": "smart_s_mK2_sample_006_snr5.5dB.wav",
+      "duration_sec": 8.231897221362964,
+      "signal_power": 0.41675254940531764,
+      "noise_power": 0.22010991802659952,
+      "snr_db": 5.544773063371416,
+      "center_freq_mhz": 2954.7185811412,
+      "num_samples": 395131
+    },
+    {
+      "filename": "smart_s_mK2_sample_007_snr10.0dB.wav",
+      "duration_sec": 5.71244658802436,
+      "signal_power": 0.6447231987863177,
+      "noise_power": 0.203819386925403,
+      "snr_db": 10.002556131766372,
+      "center_freq_mhz": 2949.04929056393,
+      "num_samples": 274197
+    },
+    {
+      "filename": "smart_s_mK2_sample_008_snr19.1dB.wav",
+      "duration_sec": 9.218027207596682,
+      "signal_power": 0.33398073542898193,
+      "noise_power": 0.036959809294449364,
+      "snr_db": 19.11983390039808,
+      "center_freq_mhz": 2958.385007605823,
+      "num_samples": 442465
+    },
+    {
+      "filename": "smart_s_mK2_sample_009_snr20.1dB.wav",
+      "duration_sec": 5.082427345901648,
+      "signal_power": 0.780508561852082,
+      "noise_power": 0.07714450311007703,
+      "snr_db": 20.10145370740823,
+      "center_freq_mhz": 2946.435485847849,
+      "num_samples": 243956
+    },
+    {
+      "filename": "smart_s_mK2_sample_010_snr18.7dB.wav",
+      "duration_sec": 9.548639146735129,
+      "signal_power": 0.7944461272826635,
+      "noise_power": 0.09228025055863022,
+      "snr_db": 18.699113745295737,
+      "center_freq_mhz": 2955.124835972454,
+      "num_samples": 458334
+    },
+    {
+      "filename": "smart_s_mK2_sample_011_snr3.3dB.wav",
+      "duration_sec": 8.223238385401018,
+      "signal_power": 0.3250500527554348,
+      "noise_power": 0.2210312918027483,
+      "snr_db": 3.3499295792470214,
+      "center_freq_mhz": 2948.6890274573516,
+      "num_samples": 394715
+    },
+    {
+      "filename": "smart_s_mK2_sample_012_snr15.3dB.wav",
+      "duration_sec": 6.631817729529151,
+      "signal_power": 0.49363470812973453,
+      "noise_power": 0.08519654255584022,
+      "snr_db": 15.259674346814746,
+      "center_freq_mhz": 2946.586829771621,
+      "num_samples": 318327
+    },
+    {
+      "filename": "smart_s_mK2_sample_013_snr25.4dB.wav",
+      "duration_sec": 9.182871234624884,
+      "signal_power": 0.7731702150584125,
+      "noise_power": 0.04169693223411788,
+      "snr_db": 25.363420229317256,
+      "center_freq_mhz": 2941.2826178383966,
+      "num_samples": 440777
+    },
+    {
+      "filename": "smart_s_mK2_sample_014_snr10.5dB.wav",
+      "duration_sec": 6.8866192264049975,
+      "signal_power": 0.5230068599750602,
+      "noise_power": 0.15668247637606242,
+      "snr_db": 10.469739166211294,
+      "center_freq_mhz": 2954.160005748468,
+      "num_samples": 330557
+    },
+    {
+      "filename": "smart_s_mK2_sample_015_snr20.4dB.wav",
+      "duration_sec": 7.933975205563083,
+      "signal_power": 0.4471816830457647,
+      "noise_power": 0.042501486606372915,
+      "snr_db": 20.44159770399446,
+      "center_freq_mhz": 2943.1325223051413,
+      "num_samples": 380830
+    },
+    {
+      "filename": "smart_s_mK2_sample_016_snr16.7dB.wav",
+      "duration_sec": 7.213763138366813,
+      "signal_power": 0.5615341433049177,
+      "noise_power": 0.08240688264420973,
+      "snr_db": 16.66825364948737,
+      "center_freq_mhz": 2941.239776758398,
+      "num_samples": 346260
+    },
+    {
+      "filename": "smart_s_mK2_sample_017_snr11.1dB.wav",
+      "duration_sec": 6.587394364320859,
+      "signal_power": 0.9174608123604957,
+      "noise_power": 0.25605356308342403,
+      "snr_db": 11.085133992984492,
+      "center_freq_mhz": 2950.372396846197,
+      "num_samples": 316194
+    },
+    {
+      "filename": "smart_s_mK2_sample_018_snr6.2dB.wav",
+      "duration_sec": 9.064213720008116,
+      "signal_power": 0.38259195570808574,
+      "noise_power": 0.18744114453300686,
+      "snr_db": 6.197418139407288,
+      "center_freq_mhz": 2948.1433874821446,
+      "num_samples": 435082
+    },
+    {
+      "filename": "smart_s_mK2_sample_019_snr2.4dB.wav",
+      "duration_sec": 5.578560047359278,
+      "signal_power": 0.3790183504595595,
+      "noise_power": 0.2862014823571639,
+      "snr_db": 2.4397671669993874,
+      "center_freq_mhz": 2950.0624211797726,
+      "num_samples": 267770
+    }
+  ]
+}

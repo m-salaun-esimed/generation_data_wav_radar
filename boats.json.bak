@@ -1,0 +1,172 @@
+{
+  "CDG": {
+    "radar_systems": [
+      {
+        "name": "smart_s_mK2",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "EF",
+            "min_mhz": 2850,
+            "max_mhz": 3050
+          }
+        ]
+      },
+      {
+        "name": "drbv_15C-EF",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "EF",
+            "min_mhz": 3000,
+            "max_mhz": 3100
+          }
+        ]
+      },
+      {
+        "name": "SCANTER_6200_I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "I",
+            "min_mhz": 9300,
+            "max_mhz": 9400
+          }
+        ]
+      },
+      {
+        "name": "ARABEL-I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "I",
+            "min_mhz": 9200,
+            "max_mhz": 9600
+          }
+        ]
+      }
+    ]
+  },
+  "FLF": {
+    "radar_systems": [
+      {
+        "name": "DRBV_15_C",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "C",
+            "min_mhz": 3000,
+            "max_mhz": 3100
+          }
+        ]
+      },
+      {
+        "name": "DRBN_34_I",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "I",
+            "min_mhz": 9300,
+            "max_mhz": 9400
+          }
+        ]
+      },
+      {
+        "name": "KUMC_J",
+        "description": "",
+        "frequency_ranges": [
+          {
+            "band": "J",
+            "min_mhz": 14000,
+            "max_mhz": 17000
+          }
+        ]
+      }
+    ]
+  },
+    "FREMM": {
+      "radar_systems": [
+        {
+          "name": "HERAKLES_EF",
+          "description": "",
+          "frequency_ranges": [
+            {
+              "band": "EF",
+              "min_mhz": 2800,
+              "max_mhz": 2900
+            }
+          ]
+        },
+        {
+          "name": "SCANTER_6002_I",
+          "description": "",
+          "frequency_ranges": [
+            {
+              "band": "I",
+              "min_mhz": 9300,
+              "max_mhz": 9400
+            }
+          ]
+        },
+        {
+          "name": "SCANTER_2001_I",
+          "description": "",
+          "frequency_ranges": [
+            {
+              "band": "I",
+              "min_mhz": 9300,
+              "max_mhz": 9400
+            }
+          ]
+        }
+      ]
+    },
+    "FDA": {
+      "radar_systems": [
+        {
+          "name": "LRR_CD",
+          "description": "",
+          "frequency_ranges": [
+            {
+              "band": "CD",
+              "min_mhz": 1300,
+              "max_mhz": 1400
+            }
+          ]
+        },
+        {
+          "name": "EMPAR_GH",
+          "description": "",
+          "frequency_ranges": [
+            {
+              "band": "GH",
+              "min_mhz": 5500,
+              "max_mhz": 5700
+            }
+          ]
+        },
+        {
+          "name": "SCANTER_6002_I",
+          "description": "",
+          "frequency_ranges": [
+            {
+              "band": "EF",
+              "min_mhz": 9300,
+              "max_mhz": 9400
+            }
+          ]
+        },
+        {
+          "name": "ORION_RTN_2SX_J",
+          "description": "",
+          "frequency_ranges": [
+            {
+              "band": "J",
+              "min_mhz": 12000,
+              "max_mhz": 13000
+            }
+          ]
+        }
+      ]
+    }
+  }
