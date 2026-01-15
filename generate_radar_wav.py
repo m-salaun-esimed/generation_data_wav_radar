@@ -4,8 +4,9 @@ Générateur de fichiers WAV pour simulation de signaux radar.
 Usage éducatif pour l'entraînement de modèles d'IA de détection radar.
 
 Usage:
-    python generate_radar_wav.py CDG smart_s_mK2
-    python generate_radar_wav.py FREMM HERAKLES_EF
+    python generate_radar_wav.py                    # Génère pour TOUS les radars
+    python generate_radar_wav.py --num-files 50     # 50 fichiers par radar
+    python generate_radar_wav.py --list             # Liste les radars disponibles
 """
 
 import numpy as np
@@ -342,30 +343,20 @@ class RadarWAVGenerator:
 
 
 def main():
-    """Fonction principale avec gestion des arguments."""
+    """Fonction principale - génère automatiquement pour tous les radars."""
     parser = argparse.ArgumentParser(
         description='Générateur de fichiers WAV de signaux radar simulés',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemples d'utilisation:
-  python generate_radar_wav.py CDG smart_s_mK2
-  python generate_radar_wav.py FREMM HERAKLES_EF --num-files 50
-  python generate_radar_wav.py FLF DRBV_15_C --output-dir mon_dossier
+  python generate_radar_wav.py
+  python generate_radar_wav.py --num-files 50
   python generate_radar_wav.py --list
         """
     )
 
-    parser.add_argument('boat_name', nargs='?', type=str,
-                       help='Nom du bateau (ex: CDG, FREMM, FLF, FDA)')
-
-    parser.add_argument('radar_name', nargs='?', type=str,
-                       help='Nom du radar à simuler (ex: smart_s_mK2, HERAKLES_EF)')
-
-    parser.add_argument('--output-dir', '-o', type=str, default=None,
-                       help='Dossier de sortie (défaut: nom du radar)')
-
     parser.add_argument('--num-files', '-n', type=int, default=20,
-                       help='Nombre de fichiers à générer (défaut: 20)')
+                       help='Nombre de fichiers à générer par radar (défaut: 20)')
 
     parser.add_argument('--duration-min', type=float, default=5.0,
                        help='Durée minimale en secondes (défaut: 5.0)')
@@ -379,6 +370,9 @@ Exemples d'utilisation:
     parser.add_argument('--list', '-l', action='store_true',
                        help='Liste tous les radars disponibles')
 
+    parser.add_argument('--output-base-dir', '-o', type=str, default='iq_data',
+                       help='Dossier de base pour la sortie (défaut: iq_data)')
+
     args = parser.parse_args()
 
     # Création du générateur
@@ -389,21 +383,44 @@ Exemples d'utilisation:
         generator.list_available_radars()
         return
 
-    # Vérification des arguments
-    if not args.boat_name or not args.radar_name:
-        print("Erreur: Vous devez spécifier le nom du bateau ET le nom du radar")
-        print("\nUtilisez --list pour voir les bateaux et radars disponibles")
-        parser.print_help()
-        return
+    # Chargement du fichier JSON
+    with open('boats.json', 'r') as f:
+        boats_data = json.load(f)
 
-    # Génération du dataset
-    generator.generate_dataset(
-        boat_name=args.boat_name,
-        radar_name=args.radar_name,
-        output_dir=args.output_dir,
-        num_files=args.num_files,
-        duration_range=(args.duration_min, args.duration_max)
-    )
+    print("=" * 70)
+    print("Génération automatique pour TOUS les radars")
+    print("=" * 70)
+
+    # Compteur global
+    total_radars = sum(len(boat_info['radar_systems']) for boat_info in boats_data.values())
+    radar_count = 0
+
+    # Itération sur tous les bateaux et tous les radars
+    for boat_name, boat_info in boats_data.items():
+        for radar in boat_info['radar_systems']:
+            radar_count += 1
+            radar_name = radar['name']
+
+            print(f"\n[{radar_count}/{total_radars}] Traitement: {boat_name} / {radar_name}")
+            print("-" * 70)
+
+            # Dossier de sortie : output_base_dir/BATEAU/RADAR/
+            output_dir = f"{args.output_base_dir}/{boat_name}/{radar_name}"
+
+            # Génération du dataset
+            generator.generate_dataset(
+                boat_name=boat_name,
+                radar_name=radar_name,
+                output_dir=output_dir,
+                num_files=args.num_files,
+                duration_range=(args.duration_min, args.duration_max)
+            )
+
+    print("\n" + "=" * 70)
+    print(f"GÉNÉRATION COMPLÈTE!")
+    print(f"Total: {total_radars} radars traités")
+    print(f"Dossier racine: {args.output_base_dir}/")
+    print("=" * 70)
 
 
 if __name__ == "__main__":
