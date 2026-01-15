@@ -65,70 +65,75 @@ class RadarWAVGenerator:
         raise ValueError(f"Radar '{radar_name}' non trouvé sur le bateau '{boat_name}'. Radars disponibles: {available_radars}")
 
     def generate_radar_signal(self,
-                             center_freq_mhz: float,
-                             bandwidth_mhz: float,
-                             duration_sec: float,
-                             signal_power: float,
-                             noise_power: float,
-                             prf_hz: float = None,
-                             duty_cycle: float = 0.1) -> np.ndarray:
-        """
-        Génère un signal radar avec paramètres spécifiques.
+                         center_freq_mhz: float,
+                         bandwidth_mhz: float,
+                         duration_sec: float,
+                         signal_power: float,
+                         noise_power: float,
+                         prf_hz: float = None,
+                         duty_cycle: float = 0.1,
+                         rotation_time: float = None,
+                         snr_modulation: bool = False) -> np.ndarray:
 
-        Args:
-            center_freq_mhz: Fréquence centrale en MHz
-            bandwidth_mhz: Largeur de bande en MHz
-            duration_sec: Durée totale du signal en secondes
-            signal_power: Puissance du signal (0-1)
-            noise_power: Puissance du bruit (0-1)
-            prf_hz: Pulse Repetition Frequency en Hz (None = mode continu)
-            duty_cycle: Rapport cyclique pour les pulses (0-1)
-
-        Returns:
-            Signal audio (numpy array)
-        """
         num_samples = int(duration_sec * self.sample_rate)
         t = np.linspace(0, duration_sec, num_samples)
 
-        # Conversion de la fréquence radar en fréquence audio
-        # On transpose la fréquence radar vers le domaine audio (20 Hz - 20 kHz)
-        # en gardant les proportions
-        audio_center_freq = 1000 + (center_freq_mhz % 1000)  # Fréquence audio entre 1-2 kHz
-        audio_bandwidth = min(bandwidth_mhz * 10, 5000)  # Largeur de bande audio
+        # Conversion fréquence radar -> audio
+        audio_center_freq = 1000 + (center_freq_mhz % 1000)
+        audio_bandwidth = min(bandwidth_mhz * 10, 5000)
 
         if prf_hz is None:
-            # Mode continu (CW - Continuous Wave)
-            # Signal avec modulation FM (chirp)
+            # CW signal avec chirp
             chirp_rate = audio_bandwidth / duration_sec
             phase = 2 * np.pi * (audio_center_freq * t + 0.5 * chirp_rate * t**2)
             signal = signal_power * np.sin(phase)
-
         else:
-            # Mode pulsé
+            # Pulsed signal
             pulse_period = 1.0 / prf_hz
             pulse_duration = pulse_period * duty_cycle
             num_pulses = int(duration_sec / pulse_period)
-
             signal = np.zeros(num_samples)
 
             for pulse_idx in range(num_pulses):
-                # Génération d'un pulse avec chirp
                 pulse_start_time = pulse_idx * pulse_period
                 pulse_end_time = pulse_start_time + pulse_duration
-
-                # Masque temporel pour ce pulse
                 pulse_mask = (t >= pulse_start_time) & (t < pulse_end_time)
 
                 if np.any(pulse_mask):
                     t_pulse = t[pulse_mask] - pulse_start_time
                     chirp_rate = audio_bandwidth / pulse_duration
                     phase = 2 * np.pi * (audio_center_freq * t_pulse + 0.5 * chirp_rate * t_pulse**2)
-
-                    # Envelope gaussienne pour chaque pulse
                     envelope = np.exp(-((t_pulse - pulse_duration/2) / (pulse_duration/6))**2)
                     signal[pulse_mask] = signal_power * envelope * np.sin(phase)
 
-        # Ajout de bruit gaussien
+        # --- Modulation SNR “bosse sur 1/8 de rotation_time” ---
+        if snr_modulation and rotation_time is not None:
+            cycle_samples = int(rotation_time * self.sample_rate)
+            burst_samples = max(1, cycle_samples // 8)  # 1/8 du cycle pour le burst
+            num_cycles = int(np.ceil(num_samples / cycle_samples))
+
+            mod_signal = np.zeros(num_samples)
+
+            for cycle in range(num_cycles):
+                start_idx = cycle * cycle_samples
+                end_idx = min((cycle + 1) * cycle_samples, num_samples)
+                length = end_idx - start_idx
+
+                # top_value aléatoire pour ce cycle
+                top_value = np.random.uniform(0.60, 1.0)
+
+                # Création de la bosse sinus 0->top->0 sur burst_samples
+                burst_len = min(burst_samples, length)
+                env_burst = top_value * np.sin(np.linspace(0, np.pi, burst_len))
+
+                # On place le burst au début du cycle
+                mod_signal[start_idx:start_idx + burst_len] = env_burst
+
+            # On module le signal
+            signal = signal * mod_signal
+
+
+        # Ajout de bruit
         noise = np.random.normal(0, noise_power, num_samples)
         signal_with_noise = signal + noise
 
@@ -170,7 +175,7 @@ class RadarWAVGenerator:
                         radar_name: str,
                         output_dir: str = None,
                         num_files: int = 20,
-                        duration_range: Tuple[float, float] = (5.0, 10.0),
+                        duration_range: Tuple[float, float] = (30.0, 50.0),
                         power_range: Tuple[float, float] = (0.3, 1.0),
                         noise_range: Tuple[float, float] = (0.01, 0.3)):
         """
@@ -267,8 +272,12 @@ class RadarWAVGenerator:
             signal_power = np.random.uniform(*power_range)
             noise_power = np.random.uniform(*noise_range)
 
-            # Fréquence centrale aléatoire entre min_freq et max_freq
-            actual_center_freq = np.random.uniform(min_freq, max_freq)
+            # Variation de fréquence (±5% autour du centre)
+            center_freq = np.random.uniform(min_freq, max_freq)
+            freq_variation = np.random.uniform(-bandwidth*0.05, bandwidth*0.05)
+            actual_center_freq = center_freq + freq_variation
+
+
 
             # Calcul du SNR
             snr_db = self.calculate_snr(signal_power, noise_power)
@@ -280,9 +289,12 @@ class RadarWAVGenerator:
                 duration_sec=duration,
                 signal_power=signal_power,
                 noise_power=noise_power,
-                prf_hz=prf_hz,  # PRF fixe basé sur PRI du radar
-                duty_cycle=duty_cycle  # Duty cycle fixe basé sur DI et PRI
+                prf_hz=prf_hz,
+                duty_cycle=duty_cycle,
+                rotation_time=radar_info.get('rotation_time', 1),
+                snr_modulation=True
             )
+
 
             # Nom du fichier
             filename = f"{radar_name}_sample_{i:03d}_snr{snr_db:.1f}dB.wav"
@@ -357,11 +369,9 @@ Exemples d'utilisation:
     parser.add_argument('--num-files', '-n', type=int, default=20,
                        help='Nombre de fichiers à générer par radar (défaut: 20)')
 
-    parser.add_argument('--duration-min', type=float, default=5.0,
-                       help='Durée minimale en secondes (défaut: 5.0)')
+    parser.add_argument('--duration-min', type=float, default=30.0)
+    parser.add_argument('--duration-max', type=float, default=50.0)
 
-    parser.add_argument('--duration-max', type=float, default=10.0,
-                       help='Durée maximale en secondes (défaut: 10.0)')
 
     parser.add_argument('--sample-rate', type=int, default=48000,
                        help='Taux d\'échantillonnage audio en Hz (défaut: 48000)')

@@ -12,7 +12,8 @@
           }
         ],
         "DI_ms": 45,
-        "PRI_ms": 450
+        "PRI_ms": 450,
+        "rotation_time": 1
       },
       {
         "name": "drbv_15C-EF",
@@ -25,7 +26,8 @@
           }
         ],
         "DI_ms": 35,
-        "PRI_ms": 380
+        "PRI_ms": 380,
+        "rotation_time": 2
       },
       {
         "name": "SCANTER_6200_I",
@@ -38,7 +40,8 @@
           }
         ],
         "DI_ms": 15,
-        "PRI_ms": 220
+        "PRI_ms": 220,
+        "rotation_time": 4
       },
       {
         "name": "ARABEL-I",
@@ -51,7 +54,8 @@
           }
         ],
         "DI_ms": 28,
-        "PRI_ms": 420
+        "PRI_ms": 420,
+        "rotation_time": 5
       }
     ]
   },
@@ -68,7 +72,8 @@
           }
         ],
         "DI_ms": 32,
-        "PRI_ms": 410
+        "PRI_ms": 410,
+        "rotation_time": 3
       },
       {
         "name": "DRBN_34_I",
@@ -81,7 +86,8 @@
           }
         ],
         "DI_ms": 18,
-        "PRI_ms": 290
+        "PRI_ms": 290,
+        "rotation_time": 8
       },
       {
         "name": "KUMC_J",
@@ -94,7 +100,8 @@
           }
         ],
         "DI_ms": 8,
-        "PRI_ms": 150
+        "PRI_ms": 150,
+        "rotation_time": 7
       }
     ]
   },
@@ -111,7 +118,8 @@
           }
         ],
         "DI_ms": 55,
-        "PRI_ms": 480
+        "PRI_ms": 480,
+        "rotation_time": 4
       },
       {
         "name": "SCANTER_6002_I",
@@ -124,7 +132,8 @@
           }
         ],
         "DI_ms": 12,
-        "PRI_ms": 260
+        "PRI_ms": 260,
+        "rotation_time": 9
       },
       {
         "name": "SCANTER_2001_I",
@@ -137,7 +146,8 @@
           }
         ],
         "DI_ms": 16,
-        "PRI_ms": 280
+        "PRI_ms": 280,
+        "rotation_time": 7
       }
     ]
   },
@@ -154,7 +164,8 @@
           }
         ],
         "DI_ms": 65,
-        "PRI_ms": 500
+        "PRI_ms": 500,
+        "rotation_time": 1
       },
       {
         "name": "EMPAR_GH",
@@ -167,7 +178,8 @@
           }
         ],
         "DI_ms": 25,
-        "PRI_ms": 340
+        "PRI_ms": 340,
+        "rotation_time": 3
       },
       {
         "name": "SCANTER_6002_I",
@@ -193,7 +205,8 @@
           }
         ],
         "DI_ms": 6,
-        "PRI_ms": 160
+        "PRI_ms": 160,
+        "rotation_time": 8
       }
     ]
   }
