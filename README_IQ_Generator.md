@@ -1,6 +1,6 @@
-# Générateur de Données IQ Radar - Usage Éducatif
+# Générateur de Signaux Radar WAV - Usage Éducatif
 
-Ce script génère des données IQ (In-phase/Quadrature) simulées pour différents systèmes radar navals, basé sur les caractéristiques de fréquence de vrais radars. Utile pour l'entraînement de modèles d'IA de classification radar.
+Ce script génère des signaux radar simulés au format WAV pour différents systèmes radar navals, basé sur les caractéristiques de fréquence de vrais radars. Utile pour l'entraînement de modèles d'IA de classification radar.
 
 ## Installation
 
@@ -10,70 +10,103 @@ pip install -r requirements.txt
 
 ## Utilisation
 
-### Génération du dataset complet
+### Génération automatique de tous les radars
 
 ```bash
-python generate_iq_radar_data.py
+python generate_radar_wav.py
 ```
 
-Cela générera des données IQ pour tous les bateaux définis dans `boats.json` :
+Cela générera automatiquement des fichiers WAV pour tous les bateaux et radars définis dans `boats.json` :
 - **CDG** (Charles de Gaulle) : 4 systèmes radar
 - **FLF** (Frégate Légère Furtive) : 3 systèmes radar
 - **FREMM** : 3 systèmes radar
 - **FDA** (Frégate de Défense Aérienne) : 4 systèmes radar
+
+Par défaut, 20 fichiers WAV sont générés par radar (280 fichiers au total).
+
+### Options disponibles
+
+```bash
+# Générer 50 fichiers par radar au lieu de 20
+python generate_radar_wav.py --num-files 50
+
+# Changer le dossier de sortie
+python generate_radar_wav.py --output-base-dir mes_donnees
+
+# Modifier la durée des signaux (min et max en secondes)
+python generate_radar_wav.py --duration-min 3.0 --duration-max 8.0
+
+# Lister tous les radars disponibles
+python generate_radar_wav.py --list
+```
 
 ### Structure des fichiers générés
 
 ```
 iq_data/
 ├── CDG/
-│   ├── smart_s_mK2_EF_2950MHz_sample000.iq
-│   ├── smart_s_mK2_EF_2950MHz_sample000.csv
-│   ├── smart_s_mK2_EF_2950MHz_sample001.iq
-│   ├── ...
-│   └── metadata.json
+│   ├── smart_s_mK2/
+│   │   ├── smart_s_mK2_sample_000_snr12.5dB.wav
+│   │   ├── smart_s_mK2_sample_001_snr18.3dB.wav
+│   │   ├── ...
+│   │   └── metadata.json
+│   ├── drbv_15C-EF/
+│   ├── SCANTER_6200_I/
+│   └── ARABEL-I/
 ├── FLF/
-│   ├── ...
+│   ├── DRBV_15_C/
+│   ├── DRBN_34_I/
+│   └── KUMC_J/
 ├── FREMM/
-│   ├── ...
+│   ├── HERAKLES_EF/
+│   ├── SCANTER_6002_I/
+│   └── SCANTER_2001_I/
 └── FDA/
-    ├── ...
+    ├── LRR_CD/
+    ├── EMPAR_GH/
+    ├── SCANTER_6002_I/
+    └── ORION_RTN_2SX_J/
 ```
 
-## Format des données IQ
+## Format des données
 
-### Fichiers .iq (binaire)
-- Format : **float32** entrelacé (I, Q, I, Q, ...)
-- Taux d'échantillonnage : 10 MHz par défaut
+### Fichiers .wav
+- Format : **WAV 16-bit mono**
+- Taux d'échantillonnage : 48 kHz par défaut
+- Durée : 5-10 secondes (aléatoire par fichier)
 - Normalisation : valeurs entre -1.0 et 1.0
-
-### Fichiers .csv (texte, échantillon uniquement)
-Colonnes :
-- `sample_index` : Index de l'échantillon
-- `I` : Composante In-phase
-- `Q` : Composante Quadrature
-- `magnitude` : Magnitude du signal √(I² + Q²)
-- `phase` : Phase du signal arctan2(Q, I)
 
 ### metadata.json
 Contient les informations sur chaque fichier généré :
-- Nom du radar
+- Nom du radar et bateau
 - Bande de fréquence
 - Fréquence centrale
 - Largeur de bande
-- Nombre d'échantillons
+- DI (Durée d'Impulsion) en ms
+- PRI (Période de Répétition) en ms
+- PRF (Fréquence de Répétition) en Hz
+- Duty Cycle (%)
+- Paramètres par fichier : SNR, puissance, bruit, durée
 
 ## Caractéristiques de la simulation
 
 ### Signal radar simulé
 - **Type de modulation** : LFM (Linear Frequency Modulation / Chirp)
-- **Enveloppe** : Gaussienne pour chaque pulse
-- **PRF** : 1000 Hz (Pulse Repetition Frequency)
-- **Durée de pulse** : 1 ms
-- **Nombre de pulses** : 10 par échantillon
+- **Mode** : Pulsé avec PRF et duty cycle réalistes
+- **DI** : Durée d'Impulsion (fixe par radar, signature unique)
+- **PRI** : Période de Répétition des Impulsions (fixe par radar, 100-500 ms)
+- **PRF** : Calculée automatiquement (1000 / PRI_ms Hz)
+- **Duty Cycle** : Calculé automatiquement (DI_ms / PRI_ms)
+
+### Paramètres aléatoires par fichier
+- **SNR** : Signal-to-Noise Ratio (5-30 dB)
+- **Puissance du signal** : 0.3-1.0
+- **Niveau de bruit** : 0.01-0.3
+- **Durée** : 5-10 secondes
+- **Variation de fréquence** : ±5% autour du centre
 
 ### Bruit
-- Bruit gaussien ajouté (niveau configurable 0.05-0.15)
+- Bruit gaussien ajouté (niveau aléatoire par fichier)
 - Bruit de fond continu entre les pulses
 - Simule les conditions réelles de capture radar
 
@@ -83,21 +116,22 @@ Contient les informations sur chaque fichier généré :
 
 ```python
 import numpy as np
+import wave
 import json
 
-# Charger les métadonnées
-with open('iq_data/CDG/metadata.json', 'r') as f:
+# Charger les métadonnées d'un radar
+with open('iq_data/CDG/smart_s_mK2/metadata.json', 'r') as f:
     metadata = json.load(f)
 
-# Charger un fichier IQ
-iq_data = np.fromfile('iq_data/CDG/smart_s_mK2_EF_2950MHz_sample000.iq', dtype=np.float32)
+# Charger un fichier WAV
+def load_wav(filepath):
+    """Charge un fichier WAV."""
+    with wave.open(filepath, 'r') as wav:
+        signal = np.frombuffer(wav.readframes(-1), dtype=np.int16)
+        signal = signal.astype(np.float32) / 32768.0  # Normalisation
+        return signal, wav.getframerate()
 
-# Séparer I et Q
-I = iq_data[0::2]
-Q = iq_data[1::2]
-
-# Signal complexe
-signal = I + 1j * Q
+signal, sample_rate = load_wav('iq_data/CDG/smart_s_mK2/smart_s_mK2_sample_000_snr12.5dB.wav')
 ```
 
 ### Exemple de dataset pour entraînement
@@ -105,101 +139,109 @@ signal = I + 1j * Q
 ```python
 import numpy as np
 from pathlib import Path
-import json
+import wave
 
-def load_iq_dataset(data_dir='iq_data'):
-    """Charge tous les fichiers IQ avec leurs labels."""
+def load_dataset(data_dir='iq_data'):
+    """Charge tous les fichiers WAV avec leurs labels."""
     X = []  # Signaux
     y = []  # Labels (nom du bateau)
 
     for boat_dir in Path(data_dir).iterdir():
-        if boat_dir.is_dir():
-            boat_name = boat_dir.name
+        if not boat_dir.is_dir():
+            continue
 
-            # Charger tous les fichiers .iq
-            for iq_file in boat_dir.glob('*.iq'):
-                iq_data = np.fromfile(iq_file, dtype=np.float32)
-                I = iq_data[0::2]
-                Q = iq_data[1::2]
-                signal = I + 1j * Q
+        boat_name = boat_dir.name
+
+        for radar_dir in boat_dir.iterdir():
+            if not radar_dir.is_dir():
+                continue
+
+            radar_name = radar_dir.name
+
+            # Charger tous les fichiers .wav
+            for wav_file in radar_dir.glob('*.wav'):
+                with wave.open(str(wav_file), 'r') as wav:
+                    signal = np.frombuffer(wav.readframes(-1), dtype=np.int16)
+                    signal = signal.astype(np.float32) / 32768.0
 
                 X.append(signal)
-                y.append(boat_name)
+                y.append(f"{boat_name}_{radar_name}")
 
-    return np.array(X, dtype=object), np.array(y)
+    return X, y
 
 # Utilisation
-X, y = load_iq_dataset()
+X, y = load_dataset()
 print(f"Dataset: {len(X)} échantillons")
-print(f"Classes: {np.unique(y)}")
+print(f"Classes: {len(set(y))} radars différents")
 ```
 
 ### Exemple de traitement signal pour features
 
 ```python
 import numpy as np
-from scipy import signal
+from scipy import signal as sp_signal
+from scipy.fft import fft, fftfreq
 
-def extract_features(iq_signal, sample_rate=10e6):
-    """Extrait des features du signal IQ pour l'IA."""
+def extract_features(wav_signal, sample_rate=48000):
+    """Extrait des features du signal WAV pour l'IA."""
 
     # 1. Spectre de puissance (FFT)
-    fft = np.fft.fft(iq_signal)
-    power_spectrum = np.abs(fft)**2
+    fft_vals = fft(wav_signal)
+    fft_freq = fftfreq(len(wav_signal), 1/sample_rate)
+    power_spectrum = np.abs(fft_vals)**2
 
     # 2. Spectrogramme
-    f, t, Sxx = signal.spectrogram(iq_signal, fs=sample_rate)
+    f, t, Sxx = sp_signal.spectrogram(wav_signal, fs=sample_rate)
 
     # 3. Features statistiques
     features = {
         'mean_power': np.mean(power_spectrum),
         'peak_power': np.max(power_spectrum),
-        'bandwidth': estimate_bandwidth(power_spectrum),
-        'spectral_centroid': spectral_centroid(power_spectrum),
-        # ... autres features
+        'spectral_centroid': np.sum(fft_freq[:len(fft_freq)//2] * power_spectrum[:len(power_spectrum)//2]) / np.sum(power_spectrum[:len(power_spectrum)//2]),
+        'bandwidth': np.std(power_spectrum),
+        'snr_estimate': 10 * np.log10(np.max(power_spectrum) / np.mean(power_spectrum))
     }
 
-    return features
-
-def spectral_centroid(spectrum):
-    """Calcule le centroïde spectral."""
-    freqs = np.fft.fftfreq(len(spectrum))
-    return np.sum(freqs * spectrum) / np.sum(spectrum)
-
-def estimate_bandwidth(spectrum, threshold=0.5):
-    """Estime la largeur de bande à -3dB."""
-    max_power = np.max(spectrum)
-    above_threshold = spectrum > (max_power * threshold)
-    return np.sum(above_threshold)
+    return features, Sxx
 ```
 
 ## Personnalisation
 
-### Modifier les paramètres de simulation
+### Modifier les paramètres de génération
 
-```python
-# Dans le script generate_iq_radar_data.py
-simulator = RadarIQSimulator(sample_rate=20e6)  # Taux d'échantillonnage 20 MHz
+```bash
+# Générer plus de fichiers par radar
+python generate_radar_wav.py --num-files 100
 
-simulator.generate_dataset_for_boat(
-    boat_name=boat_name,
-    radar_systems=boat_info['radar_systems'],
-    output_dir="iq_data",
-    num_samples=10  # Générer 10 échantillons par radar
-)
+# Changer la durée des signaux
+python generate_radar_wav.py --duration-min 3.0 --duration-max 15.0
+
+# Utiliser un taux d'échantillonnage différent
+python generate_radar_wav.py --sample-rate 96000
 ```
 
-### Modifier les caractéristiques des pulses
+### Modifier boats.json pour ajouter des radars
 
-```python
-I, Q = self.generate_multi_pulse_train(
-    center_freq_mhz=center_freq,
-    bandwidth_mhz=bandwidth,
-    pulse_duration_ms=2.0,  # Pulse plus long
-    pulse_repetition_freq_hz=500,  # PRF plus basse
-    num_pulses=20,  # Plus de pulses
-    noise_level=0.2  # Plus de bruit
-)
+```json
+{
+  "NOUVEAU_BATEAU": {
+    "radar_systems": [
+      {
+        "name": "mon_radar",
+        "description": "Description du radar",
+        "frequency_ranges": [
+          {
+            "band": "X",
+            "min_mhz": 8000,
+            "max_mhz": 12000
+          }
+        ],
+        "DI_ms": 30,
+        "PRI_ms": 250
+      }
+    ]
+  }
+}
 ```
 
 ## Avertissement
