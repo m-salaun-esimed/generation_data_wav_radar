@@ -1,6 +1,6 @@
 # Générateur de Signaux Radar Simulés
 
-Générateur de fichiers audio WAV simulant des signaux radar de navires militaires français. Conçu pour l'entraînement de modèles d'intelligence artificielle de détection et classification radar.
+Générateur de fichiers audio WAV simulant des signaux radar de navires. Conçu pour l'entraînement de modèles d'intelligence artificielle de détection et classification radar.
 
 ##  Description
 
@@ -229,7 +229,7 @@ def create_cnn_model(input_shape):
     return model
 ```
 
-## 📡 Radars Disponibles
+## 📡 Radars Disponibles ( fausse information )
 
 ### CDG (Charles de Gaulle)
 - **smart_s_mK2** - Bande EF (2850-3050 MHz) - DI: 45ms, PRI: 450ms
@@ -287,23 +287,4 @@ def create_cnn_model(input_shape):
 
 ## Avertissement
 
-Ce code génère des **signaux simulés à des fins éducatives**. Les caractéristiques sont basées sur des données publiques et ne représentent pas nécessairement avec exactitude les signaux réels des systèmes radar militaires.
-
-**Usage autorisé** : Recherche, éducation, entraînement d'IA
-**Usage interdit** : Applications militaires offensives, espionnage
-
-## Licence
-
-Usage éducatif uniquement.
-
-## Contribution
-
-Les contributions sont les bienvenues pour :
-- Ajouter de nouveaux radars
-- Améliorer la simulation de signal
-- Optimiser les performances
-- Ajouter des exemples d'utilisation
-
-## Contact
-
-Pour toute question sur l'utilisation éducative de ce projet.
+Ce code génère des **signaux simulés à des fins éducatives**. Les caractéristiques sont basées sur des données publiques et ne représentent pas nécessairement avec exactitude les signaux réels des systèmes radar.
